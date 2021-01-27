@@ -207,12 +207,12 @@ calculateArea(externalLength: 9, externalWidth: 6, externalCsPerSq: 0.10)
 //    For example a 5" radius pie with 3 toppings:
 //    5 * 5 * 3.14 * (0.05 + 0.03 * 3) = 10.99
 
-func orderPizza(pie: String, size: Int, numOfToppings: Int) {
+func orderPizza(pie: String, size: Int, numOfToppings: Int) -> (pizzaType: String, size: Int, price: Double) {
     let cost = Double(size) * Double(size) * 3.14 * (0.05 + 0.03 * 3)
-    print(pie, cost)
+    return (pie, size, cost)
 }
 
-orderPizza(pie: "my Pizza", size: 5, numOfToppings: 3)
+print(orderPizza(pie: "my Pizza", size: 5, numOfToppings: 3))
 
 
 
