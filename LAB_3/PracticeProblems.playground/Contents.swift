@@ -126,39 +126,40 @@ print(type(of: reverseArray(array: strArray)))
 // 9. Write a function that accepts a String as its only parameter, and returns true if the string has only unique letters.
 
 func hasUniqueLetters(word: String) -> Bool {
-    var isUnique = true
-    var letters: [Character:Int] = [:]
+    var letters: Set<Character> = []
     for letter in word {
-        letters[letter, default: 0] += 1
+        guard !letters.contains(letter) else {
+            return false
+        }
+        letters.insert(letter)
     }
-    for (_,value) in letters {
-    if value > 1 {
-        isUnique = false
-    }
-}
-    return isUnique
+    return true
 }
 
-hasUniqueLetters(word: "aalex")
-hasUniqueLetters(word: "Uncopyrightable")
+print(hasUniqueLetters(word: "aalex"))
+print(hasUniqueLetters(word: "Uncopyrightable"))
 
 // 10. Write a function that accepts a String and a character and returns how many times that specific character appears in the string.
 
 func specificLetterCount(word: String, char: Character) -> Int {
     var letters: [Character:Int] = [:]
-    var characterCount = 0
+//    var characterCount = 0
+    
     for letter in word {
         letters[letter, default: 0] += 1
     }
-    for (key,value) in letters {
-        if key == char {
-            characterCount = value
-        }
-    }
-    return characterCount
+    
+    return letters[char] ?? 0
+    
+//    for (key,value) in letters {
+//        if key == char {
+//            characterCount = value
+//        }
+//    }
+//    return characterCount
 }
 
-specificLetterCount(word: "aaaalexxxxxxx", char: "x")
+print(specificLetterCount(word: "aaaalexxxxxxx", char: "x"))
 
 // 1. Given the following grid
 let image = UIImage(named: "grid.png") // CLICK TO SEE GRID IMAGE ------>
@@ -170,21 +171,58 @@ func createGrid(grid: [[Int]]) {
     }
 }
 
-func addEvenGridRow(grid: [[Int]]) {
-    var rowSum = 0
-    var rowNum = 0
+func addEvenGridRow(grid: [[Int]]) -> Int {
+//    var rowSum = 0
+//    var rowNum = 0
+//    createGrid(grid: grid)
+//    for row in grid {
+//        if rowNum % 2 == 0 {
+//            rowSum = row.reduce(0, +)
+//            print("Sum of row \(rowNum) = \(rowSum)")
+//            rowSum = 0
+//        }
+//        rowNum += 1
+//    }
     
-    createGrid(grid: grid)
-    
-    for row in grid {
-        if rowNum % 2 == 0 {
-            rowSum = row.reduce(0, +)
-            print("Sum of row \(rowNum) = \(rowSum)")
-            rowSum = 0
+    // 1. get even rows
+    var evenRows: [[Int]] = []
+    for (index, row) in grid.enumerated() {
+        if index % 2 == 0 {
+            evenRows.append(row)
         }
-        rowNum += 1
     }
+    
+    // 2. get sums of even rows
+    var evenRowSums: [Int] = []
+    for row in evenRows {
+        var count = 0
+        for n in row {
+            count += n
+        }
+        evenRowSums.append(count)
+    }
+    
+    // 3. get total sum of all even rows
+    var count = 0
+    for rowSum in evenRowSums {
+        count += rowSum
+    }
+    return count
+    
+    
+    return grid
+        // [[0,0,0,0,0], [0,1,2,3,4], [0,2,4,6,8], [0,3,6,9,12], [0,4,8,12,16]]
+        .enumerated()
+        // [(0, [0,0,0,0,0]), (1, [0,1,2,3,4]), (2, [0,2,4,6,8]), (3, [0,3,6,9,12]), (4, [0,4,8,12,16])]
+        .filter({ (index, _) in return index % 2 == 0 })
+        // [(0, [0,0,0,0,0]), (1, [0,2,4,6,8]), (2, [0,4,8,12,16])]
+        .map({ (_, row) in return row.reduce(0, +) })
+        // [0, 20, 40]
+        .reduce(0, +)
+        // 60
 }
 
 let sampleGrid = [[0,0,0,0,0], [0,1,2,3,4], [0,2,4,6,8], [0,3,6,9,12], [0,4,8,12,16]]
-addEvenGridRow(grid: sampleGrid)
+print(addEvenGridRow(grid: sampleGrid))
+
+
